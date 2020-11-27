@@ -1,2 +1,0 @@
-com/codeoftheweb/salvo/SalvoApplicationTests.java
- com.codeoftheweb.salvo.SalvoApplicationTests
