@@ -25,6 +25,7 @@ public class GamePlayer {
     private Game game;
 
     @OneToMany(mappedBy="gameplayer", fetch=FetchType.EAGER)
+    @OrderBy
     private Set<Ship> ships = new HashSet<>();
 
     @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)

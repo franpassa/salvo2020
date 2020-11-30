@@ -18,6 +18,7 @@ public class Game {
     private LocalDateTime creationDate;
 
     @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
+    @OrderBy
     private Set<GamePlayer> gamePlayers = new HashSet<>();
 
     public Game() { }
