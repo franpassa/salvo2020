@@ -58,4 +58,14 @@ public class SalvoController {
         GamePlayerDTO gpDTO = new GamePlayerDTO(repoGamePlayers.getOne(id));
         return gpDTO.makeGameViewDTO();
     }
+
+    @RequestMapping("/leaderboard")
+    public List<Map<String,Object>> getLeaderboard(){
+        return repoPlayers.findAll()
+                .stream()
+                .map(player -> {
+                    PlayerDTO pDTO = new PlayerDTO(player);
+                    return pDTO.makePlayerScoreDTO();})
+                .collect(Collectors.toList());
+    }
 }

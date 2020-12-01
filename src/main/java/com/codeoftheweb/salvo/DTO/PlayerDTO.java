@@ -25,4 +25,20 @@ public class PlayerDTO {
 
         return dto;
     }
+
+    public Map<String, Object> makePlayerScoreDTO(){
+        Map<String,Object> dto = new LinkedHashMap<>();
+        Map<String,Object> score = new LinkedHashMap<>();
+        dto.put("id",player.getid());
+        dto.put("email",player.getEmail());
+        dto.put("name",player.getName());
+        dto.put("score",score);
+
+        score.put("total", player.getTotalScore());
+        score.put("win", player.getWinScore());
+        score.put("lost", player.getLostScore());
+        score.put("tied", player.getTiedScore());
+
+        return dto;
+    }
 }

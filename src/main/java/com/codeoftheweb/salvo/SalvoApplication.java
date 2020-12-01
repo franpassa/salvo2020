@@ -22,7 +22,8 @@ public class SalvoApplication {
 									  GameRepository repositoryGame,
 									  GamePlayerRepository repositoryGamePlayer,
 									  ShipRepository repositoryShip,
-									  SalvoRepository repositorySalvo) {
+									  SalvoRepository repositorySalvo,
+									  ScoreRepository repositoryScore) {
 		return (args) -> {
 			// save a couple of customers
 			Player franco = new Player("franco@gmail.com", "Franco Passarelli");
@@ -66,6 +67,12 @@ public class SalvoApplication {
 			giuli_game.addShip(subm1);
 			franco_game.addSalvo(salvo_franco_1);
 			giuli_game.addSalvo(salvo_giuli_1);
+
+			Score score1 = new Score(franco,game,0.5,LocalDateTime.now());
+			Score score2 = new Score(giuli,game,0.5,LocalDateTime.now());
+
+			repositoryScore.save(score1);
+			repositoryScore.save(score2);
 
 			repositoryGamePlayer.save(franco_game);
 			repositoryGamePlayer.save(giuli_game);

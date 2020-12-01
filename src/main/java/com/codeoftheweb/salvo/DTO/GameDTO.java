@@ -2,10 +2,13 @@ package com.codeoftheweb.salvo.DTO;
 
 import com.codeoftheweb.salvo.model.Game;
 import com.codeoftheweb.salvo.model.GamePlayer;
+import com.codeoftheweb.salvo.model.Player;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class GameDTO {
@@ -32,6 +35,13 @@ public class GameDTO {
                 .map(gamePlayer -> {
                     GamePlayerDTO gamePlayerDTO = new GamePlayerDTO(gamePlayer);
                     return gamePlayerDTO.makeGamePlayerDTO();})
+                .collect(Collectors.toList()));
+
+        dto.put("scores",game.getScores()
+                .stream()
+                .map(score -> {
+                    ScoreDTO pDTO = new ScoreDTO(score);
+                    return pDTO.makeScoreDTO();})
                 .collect(Collectors.toList()));
 
         return dto;

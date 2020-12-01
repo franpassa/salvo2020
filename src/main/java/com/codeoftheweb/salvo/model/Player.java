@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,6 +22,10 @@ public class Player {
 
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
     private Set<GamePlayer> gamePlayers = new HashSet<>();
+
+    @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
+    @OrderBy
+    private Set<Score> scores = new HashSet<>();
 
     public Player() { }
 
@@ -45,6 +50,34 @@ public class Player {
         return id;
     }
     public void setid(long id) { this.id = id; }
+
+    public Set<Score> getScores() { return scores; }
+    public void setScores(Set<Score> scores) { this.scores = scores; }
+
+    public Score getScore(Game game){
+        return scores.stream().filter(p -> p.getGame().getid() == game.getid()).findFirst().orElse(null);
+    }
+
+    public void addScore(Score score){
+        score.setPlayer(this);
+        scores.add(score);
+    }
+
+    public long getWinScore(){
+        return scores.stream().filter(score -> score.getScore() == 1.0D).count();
+    }
+
+    public long getLostScore(){
+        return scores.stream().filter(score -> score.getScore() == 0D).count();
+    }
+
+    public long getTiedScore(){
+        return scores.stream().filter(score -> score.getScore() == 0.5D).count();
+    }
+
+    public double getTotalScore(){
+        return scores.stream().mapToDouble(score -> score.getScore()).sum();
+    }
 
     @JsonIgnore
     public List<Game> getGames() {
