@@ -3,7 +3,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +18,7 @@ public class Player {
     private long id;
     private String email;
     private String name;
+    private String password;
 
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
     private Set<GamePlayer> gamePlayers = new HashSet<>();
@@ -32,6 +32,12 @@ public class Player {
     public Player(String email, String name) {
         this.email = email;
         this.name = name;
+    }
+
+    public Player(String email, String name, String password) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
     }
 
     public String getName() {
@@ -53,6 +59,9 @@ public class Player {
 
     public Set<Score> getScores() { return scores; }
     public void setScores(Set<Score> scores) { this.scores = scores; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
     public Score getScore(Game game){
         return scores.stream().filter(p -> p.getGame().getid() == game.getid()).findFirst().orElse(null);
