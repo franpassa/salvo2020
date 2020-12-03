@@ -29,9 +29,9 @@ public class Player {
 
     public Player() { }
 
-    public Player(String email, String name) {
+    public Player(String email, String password) {
         this.email = email;
-        this.name = name;
+        this.password = password;
     }
 
     public Player(String email, String name, String password) {
