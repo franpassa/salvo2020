@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo.util;
 
+import com.codeoftheweb.salvo.model.GamePlayer;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -7,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Util {
 
@@ -24,4 +26,10 @@ public class Util {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    public static Optional<GamePlayer> getOpponent(GamePlayer gamePlayer){
+        return gamePlayer.getGame().getGamePlayers()
+                .stream()
+                .filter(gp -> gp.getid() != gamePlayer.getid())
+                .findFirst();
+    }
 }

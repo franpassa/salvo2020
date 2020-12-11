@@ -57,13 +57,21 @@ public class SalvoApplication {
 			repositoryPlayer.save(franco);
 			repositoryPlayer.save(giuli);
 
-			Ship dest1 = new Ship("Destructor", Arrays.asList("A1", "A2", "A3"));
-			Ship subm1 = new Ship("Submarine", Arrays.asList("B1","B2","B3"));
-			Ship patr1 = new Ship("Patrol_Boat", Arrays.asList("C1","C2"));
-			Ship dest2 = new Ship("Destructor", Arrays.asList("D1", "D2", "D3"));
-			Ship subm2 = new Ship("Submarine", Arrays.asList("E1","E2","E3"));
-			Ship patr2 = new Ship("Patrol_Boat", Arrays.asList("F1","F2"));
+			Game game = new Game(LocalDateTime.now());
+			repositoryGame.save(game);
 
+			GamePlayer franco_game = new GamePlayer(franco,game);
+			GamePlayer giuli_game = new GamePlayer(giuli,game);
+
+			repositoryGamePlayer.save(franco_game);
+			repositoryGamePlayer.save(giuli_game);
+
+			Ship dest1 = new Ship("destroyer", Arrays.asList("A1", "A2", "A3"),franco_game);
+			Ship subm1 = new Ship("submarine", Arrays.asList("B1","B2","B3"),franco_game);
+			Ship patr1 = new Ship("patrolboat", Arrays.asList("C1","C2"),franco_game);
+			Ship dest2 = new Ship("destroyer", Arrays.asList("D1", "D2", "D3"),giuli_game);
+			Ship subm2 = new Ship("submarine", Arrays.asList("E1","E2","E3"),giuli_game);
+			Ship patr2 = new Ship("patrolboat", Arrays.asList("F1","F2"),giuli_game);
 
 			repositoryShip.save(dest1);
 			repositoryShip.save(subm1);
@@ -71,43 +79,6 @@ public class SalvoApplication {
 			repositoryShip.save(dest2);
 			repositoryShip.save(subm2);
 			repositoryShip.save(patr2);
-
-			Game game = new Game(LocalDateTime.now());
-			repositoryGame.save(game);
-
-			GamePlayer franco_game = new GamePlayer(franco,game);
-			GamePlayer giuli_game = new GamePlayer(giuli,game);
-			repositoryGame.save(game);
-
-			Salvo salvo_franco_1 = new Salvo(1);
-			Salvo salvo_giuli_1 = new Salvo(1);
-
-			salvo_franco_1.addLocation("H1");
-			salvo_franco_1.addLocation("H2");
-
-			salvo_giuli_1.addLocation("A1");
-			salvo_giuli_1.addLocation("A2");
-
-			franco_game.addShip(dest1);
-			giuli_game.addShip(subm1);
-			franco_game.addSalvo(salvo_franco_1);
-			giuli_game.addSalvo(salvo_giuli_1);
-
-			Score score1 = new Score(franco,game,0.5,LocalDateTime.now());
-			Score score2 = new Score(giuli,game,0.5,LocalDateTime.now());
-
-			repositoryScore.save(score1);
-			repositoryScore.save(score2);
-
-			repositoryGamePlayer.save(franco_game);
-			repositoryGamePlayer.save(giuli_game);
-			repositoryGame.save(game);
-
-			repositoryShip.save(subm1);
-			repositoryShip.save(dest1);
-
-			repositorySalvo.save(salvo_franco_1);
-			repositorySalvo.save(salvo_giuli_1);
 	};
 	}
 }

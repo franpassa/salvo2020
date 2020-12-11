@@ -49,14 +49,11 @@ public class ShipController {
             return new ResponseEntity<>(Util.makeMap("error","This is not your board"), HttpStatus.FORBIDDEN);
         }
 
-        int sizeOldShips = gamePlayer.getShips().size();
-
-        if(sizeOldShips != 0){
+        if(!gamePlayer.getShips().isEmpty()){
             return new ResponseEntity<>(Util.makeMap("error","User already have ships"), HttpStatus.FORBIDDEN);
         }
 
-        int sizeNewShips = ships.size();
-        if(sizeNewShips != 5){
+        if(ships.size() != 5){
             return new ResponseEntity<>(Util.makeMap("error","You need five ships"), HttpStatus.FORBIDDEN);
         }
 

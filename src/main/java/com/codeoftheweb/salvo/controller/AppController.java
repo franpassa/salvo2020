@@ -76,7 +76,7 @@ public class AppController {
     }
 
     @RequestMapping(path = "/game/{game_id}/players", method = RequestMethod.POST)
-    public ResponseEntity<Map<String,Object>> joinGame(@PathVariable long idGame, Authentication authentication){
+    public ResponseEntity<Map<String,Object>> joinGame(@PathVariable long game_id, Authentication authentication){
 
         if(Util.isGuest(authentication)){
             return new ResponseEntity<>(Util.makeMap("error", "Is guest."), HttpStatus.UNAUTHORIZED);
@@ -84,7 +84,7 @@ public class AppController {
 
         Player player = repoPlayers.findByEmail(authentication.getName());
 
-        Game gameToJoin = repoGames.getOne(idGame);
+        Game gameToJoin = repoGames.getOne(game_id);
 
         if(gameToJoin == null){
             return new ResponseEntity<>(Util.makeMap("error", "No such game."), HttpStatus.FORBIDDEN);
@@ -95,7 +95,7 @@ public class AppController {
         if(gamePlayerCount == 1){
             GamePlayer gamePlayer = new GamePlayer(player,gameToJoin);
             repoGamePlayers.save(gamePlayer);
-            return new ResponseEntity<>(Util.makeMap("gpid",gamePlayer.getid()), HttpStatus.CREATED);
+            return new ResponseEntity<>(Util.makeMap("id",gamePlayer.getid()), HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(Util.makeMap("error","Game is full!"), HttpStatus.FORBIDDEN);
         }

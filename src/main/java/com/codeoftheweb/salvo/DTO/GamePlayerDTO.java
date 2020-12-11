@@ -64,7 +64,7 @@ public class GamePlayerDTO {
                 }).collect(Collectors.toList()));
 
         dto.put("hits", hits);
-        dto.put("gameState", "PLACESHIPS");
+        dto.put("gameState", "PLAY");
 
         return dto;
     }

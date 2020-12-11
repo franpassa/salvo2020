@@ -23,9 +23,10 @@ public class Ship {
 
     public Ship(){}
 
-    public Ship(String type, List<String> locations) {
+    public Ship(String type, List<String> locations, GamePlayer gamePlayer) {
         this.type = type;
         this.locations = locations;
+        this.gameplayer = gamePlayer;
     }
 
     public long getid() { return id; }
