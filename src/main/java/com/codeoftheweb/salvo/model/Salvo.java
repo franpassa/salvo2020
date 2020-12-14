@@ -24,6 +24,11 @@ public class Salvo {
     public Salvo() { }
     public Salvo(long turn) { this.turn = turn; }
 
+    public Salvo(long turn, List<String> locations){
+        this.turn = turn;
+        this.locations = locations;
+    }
+
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 

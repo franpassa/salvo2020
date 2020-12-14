@@ -27,17 +27,22 @@ public class GamePlayer {
 
     @OneToMany(mappedBy="gameplayer", fetch=FetchType.EAGER)
     @OrderBy
-    private Set<Ship> ships = new HashSet<>();
+    private Set<Ship> ships;
 
     @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
-    Set<Salvo> salvoes = new HashSet<>();
+    Set<Salvo> salvoes;
 
-    public GamePlayer() { }
+    public GamePlayer() {
+        ships = new HashSet<>();
+        salvoes = new HashSet<>();
+    }
 
     public GamePlayer(Player player, Game game) {
         this.creationDate = LocalDateTime.now();
         this.player = player;
         this.game = game;
+        ships = new HashSet<>();
+        salvoes = new HashSet<>();
     }
 
     public long getid() {

@@ -6,9 +6,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toMap;
 
 public class Util {
 
@@ -31,5 +32,28 @@ public class Util {
                 .stream()
                 .filter(gp -> gp.getid() != gamePlayer.getid())
                 .findFirst();
+    }
+
+    public static String gameState(GamePlayer gamePlayer){
+        if(gamePlayer.getShips().isEmpty()){
+            return "PLACESHIPS";
+        }else if (gamePlayer.getGame().getGamePlayers().size()==1){
+            return "WAITINGFOROPP";
+        }else {
+            return "PLAY";
+        }
+    }
+
+    public static Map<String, Integer> shipTypes = Stream.of(
+            new Object[][]{
+                    {"carrier", 5},
+                    {"battleship", 4},
+                    {"submarine", 3},
+                    {"destroyer", 3},
+                    {"patrolboat", 2}
+            }).collect(toMap(data -> (String)data[0], data -> (Integer)data[1]));
+
+    public static List<String> getLocationByType(String type, GamePlayer gamePlayer) {
+        return gamePlayer.getShips().size() == 0 ? new ArrayList<>() : gamePlayer.getShips().stream().filter(ship -> ship.getType().equals(type)).findFirst().get().getLocations();
     }
 }

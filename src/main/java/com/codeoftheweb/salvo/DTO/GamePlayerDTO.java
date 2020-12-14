@@ -3,6 +3,7 @@ package com.codeoftheweb.salvo.DTO;
 import com.codeoftheweb.salvo.model.GamePlayer;
 import com.codeoftheweb.salvo.model.Salvo;
 import com.codeoftheweb.salvo.model.Ship;
+import com.codeoftheweb.salvo.util.Util;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,9 +37,7 @@ public class GamePlayerDTO {
 
         Map<String, Object> hits = new LinkedHashMap<>();
 
-        hits.put("self", new ArrayList<>());
-
-        hits.put("opponent", new ArrayList<>());
+        HitsDTO hitsDTO = new HitsDTO();
 
         List<Ship> ships = gamePlayer.getShips().stream().collect(Collectors.toList());
 
@@ -63,9 +62,16 @@ public class GamePlayerDTO {
                     return salvoDTO.makeSalvoDTO();
                 }).collect(Collectors.toList()));
 
-        dto.put("hits", hits);
-        dto.put("gameState", "PLAY");
+        if(gamePlayer.getGame().getGamePlayers().size() == 2) {
+            hits.put("self", hitsDTO.makeHitsDTO(gamePlayer));
+            hits.put("opponent", hitsDTO.makeHitsDTO(Util.getOpponent(gamePlayer).get()));
+        } else {
+            hits.put("self", new ArrayList<>());
+            hits.put("opponent", new ArrayList<>());
+        }
 
+        dto.put("hits", hits);
+        dto.put("gameState", Util.gameState(gamePlayer));
         return dto;
     }
 }

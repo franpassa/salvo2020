@@ -57,14 +57,14 @@ public class ShipController {
             return new ResponseEntity<>(Util.makeMap("error","You need five ships"), HttpStatus.FORBIDDEN);
         }
 
-        List<Ship> newShips = gamePlayer.getShips()
+        List<Ship> newShips = ships
                 .stream()
                 .map(ship -> {
                     ship.setGameplayer(gamePlayer);
                     return ship;})
                 .collect(Collectors.toList());
 
-        repoShips.saveAll(ships);
+        repoShips.saveAll(newShips);
 
         return new ResponseEntity<>(Util.makeMap("OK","Added ships."),HttpStatus.CREATED);
     }

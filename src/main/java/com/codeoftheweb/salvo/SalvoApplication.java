@@ -68,10 +68,21 @@ public class SalvoApplication {
 
 			Ship dest1 = new Ship("destroyer", Arrays.asList("A1", "A2", "A3"),franco_game);
 			Ship subm1 = new Ship("submarine", Arrays.asList("B1","B2","B3"),franco_game);
-			Ship patr1 = new Ship("patrolboat", Arrays.asList("C1","C2"),franco_game);
-			Ship dest2 = new Ship("destroyer", Arrays.asList("D1", "D2", "D3"),giuli_game);
+			Ship batt1 = new Ship("battleship", Arrays.asList("C1","C2","C3","C5"),franco_game);
+			Ship carr1 = new Ship("carrier", Arrays.asList("D1","D2","D3","D4","D5"),franco_game);
+			Ship patr1 = new Ship("patrolboat", Arrays.asList("F1","F2"),franco_game);
+			Ship dest2 = new Ship("destroyer", Arrays.asList("B1", "B2", "B3"),giuli_game);
 			Ship subm2 = new Ship("submarine", Arrays.asList("E1","E2","E3"),giuli_game);
 			Ship patr2 = new Ship("patrolboat", Arrays.asList("F1","F2"),giuli_game);
+			Ship batt2 = new Ship("battleship", Arrays.asList("C1","C2","C3","C5"),giuli_game);
+			Ship carr2 = new Ship("carrier", Arrays.asList("D1","D2","D3","D4","D5"),giuli_game);
+
+			Salvo salvo1 = new Salvo(1, Arrays.asList("A1", "A2", "A3","A4","A5"));
+			Salvo salvo2 = new Salvo(1, Arrays.asList("B1", "B2", "B3","B4","B5"));
+			Salvo salvo3 = new Salvo(2, Arrays.asList("D1", "D2", "D3","D4","D5"));
+			repositorySalvo.save(salvo1);
+			repositorySalvo.save(salvo2);
+			repositorySalvo.save(salvo3);
 
 			repositoryShip.save(dest1);
 			repositoryShip.save(subm1);
@@ -79,6 +90,10 @@ public class SalvoApplication {
 			repositoryShip.save(dest2);
 			repositoryShip.save(subm2);
 			repositoryShip.save(patr2);
+			repositoryShip.save(batt1);
+			repositoryShip.save(carr1);
+			repositoryShip.save(batt2);
+			repositoryShip.save(carr2);
 	};
 	}
 }
