@@ -6,9 +6,11 @@ import com.codeoftheweb.salvo.DTO.PlayerDTO;
 import com.codeoftheweb.salvo.model.Game;
 import com.codeoftheweb.salvo.model.GamePlayer;
 import com.codeoftheweb.salvo.model.Player;
+import com.codeoftheweb.salvo.model.Score;
 import com.codeoftheweb.salvo.repository.GameRepository;
 import com.codeoftheweb.salvo.repository.GamePlayerRepository;
 import com.codeoftheweb.salvo.repository.PlayerRepository;
+import com.codeoftheweb.salvo.repository.ScoreRepository;
 import com.codeoftheweb.salvo.util.Util;
 import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,13 +45,16 @@ public class AppController {
     @Autowired
     private PlayerRepository repoPlayers;
 
+    @Autowired
+    private ScoreRepository repoScores;
+
     @RequestMapping("/gamePlayers/{id}")
     public Map<String,Object> getGamePlayer(@PathVariable long id){
         GamePlayerDTO gpDTO = new GamePlayerDTO(repoGamePlayers.getOne(id));
         return gpDTO.makeGamePlayerDTO();
     }
 
-    @RequestMapping(path = "/game_view/{id}", method = RequestMethod.GET)
+    /*@RequestMapping(path = "/game_view/{id}", method = RequestMethod.GET)
     public ResponseEntity<Map<String,Object>> getGameView(@PathVariable long id, Authentication authentication){
         Player player = repoPlayers.findByEmail(authentication.getName());
         GamePlayer gamePlayer = repoGamePlayers.getOne(id);
@@ -63,6 +69,67 @@ public class AppController {
 
         GamePlayerDTO gpDTO = new GamePlayerDTO(gamePlayer);
         return new ResponseEntity<>(gpDTO.makeGameViewDTO(), HttpStatus.ACCEPTED);
+    }*/
+
+    @RequestMapping(path = "/game_view/{ID}", method = RequestMethod.GET )
+    public ResponseEntity<Map<String, Object>> getGamePlayerView(@PathVariable long ID, Authentication authentication) {
+        if (Util.isGuest(authentication)) {
+            return new ResponseEntity<>(Util.makeMap("error", "Not Logged in"), HttpStatus.UNAUTHORIZED);
+        }
+        Long playerLogged = repoPlayers.findByEmail(authentication.getName()).getid();
+        Long playerCheck = repoGamePlayers.getOne(ID).getPlayer().getid();
+
+        if (playerLogged != playerCheck){
+            return new ResponseEntity<>(Util.makeMap("error", "This is not your game"), HttpStatus.FORBIDDEN);
+        }
+
+        GamePlayer gamePlayer = repoGamePlayers.getOne(ID);
+
+        GamePlayerDTO dtoGame_View = new GamePlayerDTO(gamePlayer);
+
+        if(Util.gameState(gamePlayer) == "WON"){
+            if(gamePlayer.getGame().getScores().size()<2) {
+                Set<Score> scores = new HashSet<>();
+                Score score1 = new Score();
+                score1.setPlayer(gamePlayer.getPlayer());
+                score1.setGame(gamePlayer.getGame());
+                score1.setFinishDate(LocalDateTime.now());
+                score1.setScore(1D);
+                repoScores.save(score1);
+                Score score2 = new Score();
+                score2.setPlayer(Util.getOpponent(gamePlayer).get().getPlayer());
+                score2.setGame(gamePlayer.getGame());
+                score2.setFinishDate(LocalDateTime.now());
+                score2.setScore(0D);
+                repoScores.save(score2);
+                scores.add(score1);
+                scores.add(score2);
+
+                Util.getOpponent(gamePlayer).get().getGame().setScores(scores);
+            }
+        }
+        if(Util.gameState(gamePlayer) == "TIE"){
+            if(gamePlayer.getGame().getScores().size()<2) {
+                Set<Score> scores = new HashSet<Score>();
+                Score score1 = new Score();
+                score1.setPlayer(gamePlayer.getPlayer());
+                score1.setGame(gamePlayer.getGame());
+                score1.setFinishDate(LocalDateTime.now());
+                score1.setScore(0.5D);
+                repoScores.save(score1);
+                Score score2 = new Score();
+                score2.setPlayer(Util.getOpponent(gamePlayer).get().getPlayer());
+                score2.setGame(gamePlayer.getGame());
+                score2.setFinishDate(LocalDateTime.now());
+                score2.setScore(0.5D);
+                repoScores.save(score2);
+                scores.add(score1);
+                scores.add(score2);
+
+                Util.getOpponent(gamePlayer).get().getGame().setScores(scores);
+            }
+        }
+        return new ResponseEntity<>(dtoGame_View.makeGameViewDTO(), HttpStatus.ACCEPTED);
     }
 
     @RequestMapping("/leaderboard")

@@ -71,7 +71,7 @@ public class GameController {
             return new ResponseEntity<>("No está autorizado", HttpStatus.UNAUTHORIZED);
         }
 
-        Game game = repoGames.save(new Game(LocalDateTime.now()));
+        Game game = repoGames.save(new Game());
 
         GamePlayer gamePlayer = repoGamePlayers.save(new GamePlayer(player,game));
 

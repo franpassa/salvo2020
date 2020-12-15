@@ -57,7 +57,7 @@ public class SalvoApplication {
 			repositoryPlayer.save(franco);
 			repositoryPlayer.save(giuli);
 
-			Game game = new Game(LocalDateTime.now());
+			/*Game game = new Game(LocalDateTime.now());
 			repositoryGame.save(game);
 
 			GamePlayer franco_game = new GamePlayer(franco,game);
@@ -93,7 +93,7 @@ public class SalvoApplication {
 			repositoryShip.save(batt1);
 			repositoryShip.save(carr1);
 			repositoryShip.save(batt2);
-			repositoryShip.save(carr2);
+			repositoryShip.save(carr2);*/
 	};
 	}
 }

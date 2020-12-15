@@ -36,10 +36,11 @@ public class Util {
     }
 
     public static String gameState(GamePlayer gamePlayer){
+
         if(gamePlayer.getGame().getGamePlayers().size()==2) {
             HitsDTO dtoHit= new HitsDTO();
             int mySelfImpact= dtoHit.makeDagame(gamePlayer);
-            int opponentImpact= dtoHit.makeDagame(Util.getOpponent(gamePlayer).get());
+            int opponentImpact= dtoHit.makeDagame(getOpponent(gamePlayer).get());
             if(mySelfImpact==17 && opponentImpact==17){
                 return  "TIE";
             }else if(mySelfImpact==17){
@@ -48,12 +49,13 @@ public class Util {
                 return "WON";
             }
         }
-
-        if(gamePlayer.getShips().isEmpty()){
+        if (gamePlayer.getShips().isEmpty()) {
             return "PLACESHIPS";
-        }else if (gamePlayer.getGame().getGamePlayers().size()==1){
+        }else if( (gamePlayer.getGame().getGamePlayers().size()==1) || getOpponent(gamePlayer).get().getShips().size()==0 ){
             return "WAITINGFOROPP";
-        }else {
+        }else if(gamePlayer.getGame().getGamePlayers().size()==2  && gamePlayer.getSalvoes().size()>getOpponent(gamePlayer).get().getSalvoes().size()) {
+            return "WAIT";
+        }else{
             return "PLAY";
         }
     }

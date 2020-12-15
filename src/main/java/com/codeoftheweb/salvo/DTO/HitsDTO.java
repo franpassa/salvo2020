@@ -14,8 +14,6 @@ public class HitsDTO {
     public List<Map<String, Object>> makeHitsDTO(GamePlayer gamePlayer){
         List<Map<String, Object>>hits = new ArrayList<>();
 
-        Map<String, Object> damagesPerTurn = new LinkedHashMap<>();
-
         List<String>carrierLocations = Util.getLocationByType("carrier",gamePlayer);
         List<String>battleshipLocations = Util.getLocationByType("battleship",gamePlayer);
         List<String>submarineLocations = Util.getLocationByType("submarine",gamePlayer);
@@ -28,14 +26,12 @@ public class HitsDTO {
         long destroyerDamage = 0;
         long patrolBoatDamage = 0;
 
-        List<Salvo> orderedSalvoes = Util.getOpponent(gamePlayer).get().getSalvoes().stream()
-                .sorted(Comparator.comparingLong(Salvo::getTurn))
-                .collect(toList());
+        for(Salvo salvoShot: Util.getOpponent(gamePlayer).get().getSalvoes()){
 
-        for(Salvo salvoShot: orderedSalvoes){
-
+            Map<String, Object> damagesPerTurn = new LinkedHashMap<>();
             List<String>hitCellsList = new ArrayList<>();
             Map<String, Object> hitsMapPerTurn = new LinkedHashMap<>();
+
 
             long missedShots = salvoShot.getLocations().size();
             long carrierHitsInTurn = 0;
@@ -82,42 +78,35 @@ public class HitsDTO {
                 }
             }
 
-            damagesPerTurn.put("carrierHits",carrierHitsInTurn);
-            damagesPerTurn.put("battleshipHits",battleshipHitsInTurn);
-            damagesPerTurn.put("submarineHits",submarineHitsInTurn);
-            damagesPerTurn.put("destroyerHits",destroyerHitsInTurn);
-            damagesPerTurn.put("patrolboatHits",patrolBoatHitsInTurn);
+            damagesPerTurn.put("carrierHits", carrierHitsInTurn);
+            damagesPerTurn.put("battleshipHits", battleshipHitsInTurn);
+            damagesPerTurn.put("submarineHits", submarineHitsInTurn);
+            damagesPerTurn.put("destroyerHits", destroyerHitsInTurn);
+            damagesPerTurn.put("patrolboatHits", patrolBoatHitsInTurn);
+            hitsMapPerTurn.put("turn", salvoShot.getTurn());
+            hitsMapPerTurn.put("hitLocations", hitCellsList);
+            hitsMapPerTurn.put("damages", damagesPerTurn);
+            hitsMapPerTurn.put("missed", missedShots);
+            hits.add(hitsMapPerTurn);
             damagesPerTurn.put("carrier", carrierDamage);
             damagesPerTurn.put("battleship", battleshipDamage);
             damagesPerTurn.put("submarine", submarineDamage);
             damagesPerTurn.put("destroyer", destroyerDamage);
             damagesPerTurn.put("patrolboat", patrolBoatDamage);
-
-
-            hitsMapPerTurn.put("turn", salvoShot.getTurn());
-            hitsMapPerTurn.put("hitLocations", hitCellsList);
-            hitsMapPerTurn.put("missed", missedShots);
-            hitsMapPerTurn.put("damages", damagesPerTurn);
-            hits.add(hitsMapPerTurn);
         }
 
         return hits;
     }
 
     public int makeDagame(GamePlayer gamePlayer){
-        List<String>carrierLocations= new ArrayList<String>();
-        List<String>battleshipLocations = new ArrayList<>();
-        List<String>submarineLocations = new ArrayList<>();
-        List<String>destroyerLocations = new ArrayList<>();
-        List<String>patrolBoatLocations = new ArrayList<>();
 
-        carrierLocations= Util.getLocationByType("carrier", gamePlayer);
-        battleshipLocations=Util.getLocationByType("battleship", gamePlayer);
-        submarineLocations=Util.getLocationByType("submarine", gamePlayer);
-        destroyerLocations=Util.getLocationByType("destroyer",gamePlayer);
-        patrolBoatLocations=Util.getLocationByType("patrolboat", gamePlayer);
+        List<String> carrierLocations = Util.getLocationByType("carrier", gamePlayer);
+        List<String> battleshipLocations = Util.getLocationByType("battleship", gamePlayer);
+        List<String> submarineLocations = Util.getLocationByType("submarine", gamePlayer);
+        List<String> destroyerLocations = Util.getLocationByType("destroyer",gamePlayer);
+        List<String> patrolBoatLocations = Util.getLocationByType("patrolboat", gamePlayer);
 
-        int countImpact=0;
+        int countImpact = 0;
 
         for(Salvo salvoShot: Util.getOpponent(gamePlayer).get().getSalvoes()){
 
