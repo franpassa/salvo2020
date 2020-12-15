@@ -103,4 +103,44 @@ public class HitsDTO {
 
         return hits;
     }
+
+    public int makeDagame(GamePlayer gamePlayer){
+        List<String>carrierLocations= new ArrayList<String>();
+        List<String>battleshipLocations = new ArrayList<>();
+        List<String>submarineLocations = new ArrayList<>();
+        List<String>destroyerLocations = new ArrayList<>();
+        List<String>patrolBoatLocations = new ArrayList<>();
+
+        carrierLocations= Util.getLocationByType("carrier", gamePlayer);
+        battleshipLocations=Util.getLocationByType("battleship", gamePlayer);
+        submarineLocations=Util.getLocationByType("submarine", gamePlayer);
+        destroyerLocations=Util.getLocationByType("destroyer",gamePlayer);
+        patrolBoatLocations=Util.getLocationByType("patrolboat", gamePlayer);
+
+        int countImpact=0;
+
+        for(Salvo salvoShot: Util.getOpponent(gamePlayer).get().getSalvoes()){
+
+            for(String location: salvoShot.getLocations()){
+                if (carrierLocations.contains(location)){
+                    countImpact++;
+                }
+                if (battleshipLocations.contains(location)){
+                    countImpact++;
+                }
+                if (submarineLocations.contains(location)){
+                    countImpact++;
+                }
+                if (destroyerLocations.contains(location)){
+                    countImpact++;
+                }
+                if (patrolBoatLocations.contains(location)){
+                    countImpact++;
+                }
+            }
+
+        }
+        return countImpact++;
+
+    }
 }
