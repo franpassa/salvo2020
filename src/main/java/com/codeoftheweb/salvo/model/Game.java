@@ -26,7 +26,7 @@ public class Game {
     private Set<Score> scores = new HashSet<>();
 
     public Game() {
-        this.creationDate = creationDate;
+        this.creationDate = LocalDateTime.now();
     }
 
     public long getid() {
