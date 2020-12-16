@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -15,7 +16,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
-    private LocalDateTime creationDate;
+    private ZonedDateTime creationDate;
 
     @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
     @OrderBy
@@ -26,7 +27,7 @@ public class Game {
     private Set<Score> scores = new HashSet<>();
 
     public Game() {
-        this.creationDate = LocalDateTime.now();
+        this.creationDate = ZonedDateTime.now();
     }
 
     public long getid() {
@@ -34,8 +35,8 @@ public class Game {
     }
     public void setid(long id) { this.id = id; }
 
-    public LocalDateTime  getCreationDate() { return creationDate; }
-    public void setCreationDate(LocalDateTime  creationDate) { this.creationDate = creationDate; }
+    public ZonedDateTime  getCreationDate() { return creationDate; }
+    public void setCreationDate(ZonedDateTime  creationDate) { this.creationDate = creationDate; }
 
     public Set<GamePlayer> getGamePlayers() { return gamePlayers; }
 
