@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.codeoftheweb.salvo.util.Util.makeMap;
+
 @RestController
 @RequestMapping("/api")
 public class PlayerController {
@@ -48,7 +50,7 @@ public class PlayerController {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
         if (repoPlayers.findByEmail(email) != null) {
-            return  new ResponseEntity<>("Name already in use",HttpStatus.FORBIDDEN);
+            return  new ResponseEntity<>(makeMap("error","The player already exists."),HttpStatus.FORBIDDEN);
         }
         repoPlayers.save(new Player(email, Util.passwordEncoder().encode(password)));
         return new ResponseEntity<>(HttpStatus.CREATED);
